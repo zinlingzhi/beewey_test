@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" data-framework="angularjs">
+	<head>
+		<meta charset="utf-8">
+		<!-- CSS -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+		<!-- JavaScript -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
+		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+		<style>[ng-cloak] { display: none; }</style>
+	</head>
+	<body ng-app="todomvc">
+		<ng-view />
+
+		<script type="text/ng-template" id="todomvc-index.html">
+			<section id="todoapp">
+				<header id="header" ng-show="!showEditForm">
+					<form id="todo-form" ng-submit="addTodo()" class="form-horizontal">
+						<div class="form-group w-100 p-2">
+							<div class="row">
+								<div class="col-md-2 p-1">
+									<input class="w-100 h-100" type="text" id="title" placeholder="Title" ng-model="newTodo.title" required>
+								</div>
+								<div class="col-md-6 p-1">
+									<input class="w-100 h-100" type="text" id="description" placeholder="Description" ng-model="newTodo.description">
+								</div>
+								<div class="col-md-2 p-1">
+									<input class="w-100 h-100" type="date" id="dueDate" ng-model="newTodo.dueDate" required>
+								</div>
+								<div class="col-md-2 p-1 align-items-end d-flex justify-content-end">
+									<button class="btn btn-primary" type="submit">Add Task</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</header>
+				<section id="main" ng-show="todos.length" ng-cloak>
+					<table class="table table-striped" ng-show="!showEditForm">
+						<tr>
+							<th>Title</th>
+							<th>Description</th>
+							<th>Due Date</th>
+							<th>Status</th>
+							<th>Action</th>
+						</tr>
+						<tr ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed:todo.completed}">
+							<td><p>{{todo.title}}</p></td>
+							<td><p>{{todo.description}}</p></td>
+							<td><p>{{todo.dueDate}}</p></td>
+							<td><p>{{todo.completed ? 'Completed' : 'Not Completed'}}</p></td>
+							<td>
+								<div class="d-flex" ng-show="!todo.completed">
+									<button class="btn btn-secondary mx-2" ng-click="editTodo(todo, $index)">Edit</button>
+									<button class="btn btn-danger mx-2" ng-click="removeTodo(todo)">Delete</button>
+									<button class="btn btn-warning mx-2" ng-click="toggleCompleted(todo, $index)">Complete</button>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<form id="todo-form" ng-show="showEditForm" ng-submit="saveEditTodo(editTodo)" class="form-horizontal">
+						<div class="form-group w-100 p-2">
+							<div class="row">
+								<input type="hidden" ng-model="editTodo.id" required>
+								<div class="col-md-2 p-1">
+									<input class="w-100 h-100" type="text" id="title" placeholder="Title" ng-model="editTodo.title" value="editTodo.title" required>
+								</div>
+								<div class="col-md-6 p-1">
+									<input class="w-100 h-100" type="text" id="description" placeholder="Description" ng-model="editTodo.description" value="editTodo.description">
+								</div>
+								<div class="col-md-2 p-1">
+									<input class="w-100 h-100" type="date" id="dueDate" ng-model="editTodo.dueDate" value="{{editTodo.dueDate | date: 'yyyy-MM-dd'}}" required>
+								</div>
+								<div class="col-md-2 p-1 align-items-end d-flex justify-content-end">
+									<button class="btn btn-primary" type="submit">Update Todo</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</section>
+			</section>
+		</script>
+		<script src="node_modules/todomvc-common/base.js"></script>
+		<script src="node_modules/angular/angular.js"></script>
+		<script src="node_modules/angular-route/angular-route.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/controllers/todoCtrl.js"></script>
+		<script src="js/services/todoStorage.js"></script>
+		<script src="js/directives/todoFocus.js"></script>
+		<script src="js/directives/todoEscape.js"></script>
+	</body>
+</html>
